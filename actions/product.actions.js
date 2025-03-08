@@ -9,6 +9,10 @@ const {
   uploadMultipleImages,
 } = require("../middlewares/uploadImage.middleware");
 
+/**
+ * @desc   Upload & Resize Product Image
+ * @access Private
+ */
 exports.uploadProductImages = uploadMultipleImages([
   {
     name: "imageCover",
@@ -19,7 +23,6 @@ exports.uploadProductImages = uploadMultipleImages([
     maxCount: 5,
   },
 ]);
-
 exports.resizeProductImages = asyncHandler(async (req, res, next) => {
   if (req.files.imageCover) {
     const imageCoverFileName = `products-${uuidv4()}-${Date.now()}-cover.jpeg`;
@@ -52,7 +55,11 @@ exports.resizeProductImages = asyncHandler(async (req, res, next) => {
   next();
 });
 
-//~ GET List of Products (PUBLIC)
+/**
+ * @desc   Get All Products
+ * @route  GET /api/v1/products
+ * @access Public
+ */
 exports.getProducts = asyncHandler(async (req, res) => {
   const documentCounts = await Product.countDocuments();
   const apiFeatures = new ApiFeatures(
@@ -76,7 +83,11 @@ exports.getProducts = asyncHandler(async (req, res) => {
   });
 });
 
-//~ GET Specific Product by ID (PUBLIC)
+/**
+ * @desc   Get Signle Product by ID
+ * @route  GET /api/v1/products/:id
+ * @access Public
+ */
 exports.getProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const product = await Product.findById(id).populate({
@@ -91,7 +102,11 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: product });
 });
 
-//~ POST Create New Product (PRIVATE)
+/**
+ * @desc   Create New Product
+ * @route  POST /api/v1/products
+ * @access Private
+ */
 exports.createProduct = asyncHandler(async (req, res, next) => {
   try {
     if (!req.body.title) {
@@ -113,7 +128,11 @@ exports.createProduct = asyncHandler(async (req, res, next) => {
   }
 });
 
-//~ PUT  Update Specific Product by ID (PRIVATE)
+/**
+ * @desc   Update Specific Product
+ * @route  PUT /api/v1/products/:id
+ * @access Private
+ */
 exports.updateProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   req.body.slug = slugify(req.body.title);
@@ -129,7 +148,11 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: product });
 });
 
-//~ DELETE  Delete Specific Product by ID (PRIVATE)
+/**
+ * @desc   Delete Specific Product
+ * @route  DELETE /api/v1/products/:id
+ * @access Private
+ */
 exports.DeleteProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 

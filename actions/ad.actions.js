@@ -7,8 +7,11 @@ const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 const AD = require("../models/Ad.model");
 
+/**
+ * @desc   Upload & Resize AD Image
+ * @access Private
+ */
 exports.uploadAdImage = uploadSingleImage("image");
-
 exports.resizeAdImage = asyncHandler(async (req, res, next) => {
   const filename = `ads-${uuidv4()}-${Date.now()}.jpeg`;
 
@@ -25,7 +28,11 @@ exports.resizeAdImage = asyncHandler(async (req, res, next) => {
   next();
 });
 
-//* GET Ads
+/**
+ * @desc   Get All Ads
+ * @route  GET /api/v1/ads
+ * @access Public
+ */
 exports.getAds = asyncHandler(async (req, res) => {
   const documentCounts = await AD.countDocuments();
   const apiFeatures = new ApiFeatures(AD.find(), req.query)
@@ -46,7 +53,11 @@ exports.getAds = asyncHandler(async (req, res) => {
   });
 });
 
-//* GET Specific Ad by id
+/**
+ * @desc   Get Signle Ad by ID
+ * @route  GET /api/v1/ads/:id
+ * @access Public
+ */
 exports.getAd = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const ad = await AD.findById(id);
@@ -58,7 +69,11 @@ exports.getAd = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: ad });
 });
 
-//* POST Create New ad
+/**
+ * @desc   Create New Ad
+ * @route  POST /api/v1/ads
+ * @access Private
+ */
 exports.createAd = asyncHandler(async (req, res) => {
   const { title, image } = req.body;
 
@@ -66,7 +81,11 @@ exports.createAd = asyncHandler(async (req, res) => {
   res.status(201).json({ status: "success", data: ad });
 });
 
-//* PUT Update Specific AD by id
+/**
+ * @desc   Update Specific Ad
+ * @route  PUT /api/v1/ads/:id
+ * @access Private
+ */
 exports.updateAd = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { title } = req.body;
@@ -84,7 +103,11 @@ exports.updateAd = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: updatedAd });
 });
 
-//* DELETE Specific AD by id
+/**
+ * @desc   Delete Specific Ad
+ * @route  DELETE /api/v1/ads/:id
+ * @access Private
+ */
 exports.DeleteAd = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
@@ -99,6 +122,11 @@ exports.DeleteAd = asyncHandler(async (req, res, next) => {
     .json({ status: "success", msg: "AD Deleted Successfully..." });
 });
 
+/**
+ * @desc   Delete All Ads
+ * @route  DELETE /api/v1/ads
+ * @access Private
+ */
 exports.DeleteAds = asyncHandler(async (req, res, next) => {
   const ads = await AD.find({});
 

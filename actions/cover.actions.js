@@ -7,8 +7,11 @@ const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 const Cover = require("../models/cover.model");
 
+/**
+ * @desc   Upload & Resize Cover Image
+ * @access Private
+ */
 exports.uploadCoverImage = uploadSingleImage("image");
-
 exports.resizeCoverImage = asyncHandler(async (req, res, next) => {
   const filename = `covers-${uuidv4()}-${Date.now()}.jpeg`;
 
@@ -25,7 +28,11 @@ exports.resizeCoverImage = asyncHandler(async (req, res, next) => {
   next();
 });
 
-//* GET Covers
+/**
+ * @desc   Get All Covers
+ * @route  GET /api/v1/covers
+ * @access Public
+ */
 exports.getCovers = asyncHandler(async (req, res) => {
   const documentCounts = await Cover.countDocuments();
   const apiFeatures = new ApiFeatures(Cover.find(), req.query)
@@ -46,7 +53,11 @@ exports.getCovers = asyncHandler(async (req, res) => {
   });
 });
 
-//* GET Specific Cover by id
+/**
+ * @desc   Get Signle Cover by ID
+ * @route  GET /api/v1/covers/:id
+ * @access Public
+ */
 exports.getCover = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const cover = await Cover.findById(id);
@@ -58,7 +69,11 @@ exports.getCover = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: cover });
 });
 
-//* POST Create New Cover
+/**
+ * @desc   Create New Cover
+ * @route  POST /api/v1/covers
+ * @access Private
+ */
 exports.createCover = asyncHandler(async (req, res) => {
   const { title, image } = req.body;
 
@@ -66,7 +81,11 @@ exports.createCover = asyncHandler(async (req, res) => {
   res.status(201).json({ status: "success", data: cover });
 });
 
-//* PUT Update Specific Cover by id
+/**
+ * @desc   Update Specific Cover
+ * @route  PUT /api/v1/covers/:id
+ * @access Private
+ */
 exports.updateCover = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { title } = req.body;
@@ -84,7 +103,11 @@ exports.updateCover = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: updatedCover });
 });
 
-//* DELETE Specific Cover by id
+/**
+ * @desc   Delete Specific Cover
+ * @route  DELETE /api/v1/covers/:id
+ * @access Private
+ */
 exports.DeleteCover = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
@@ -99,6 +122,11 @@ exports.DeleteCover = asyncHandler(async (req, res, next) => {
     .json({ status: "success", msg: "Cover Deleted Successfully..." });
 });
 
+/**
+ * @desc   Delete All Covers
+ * @route  DELETE /api/v1/covers
+ * @access Private
+ */
 exports.DeleteCovers = asyncHandler(async (req, res, next) => {
   const covers = await Cover.find({});
 

@@ -7,6 +7,10 @@ const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 const { uploadSingleImage } = require("../middlewares/uploadImage.middleware");
 
+/**
+ * @desc   Upload & Resize Category Image
+ * @access Private
+ */
 exports.uploadCategoryImage = uploadSingleImage("image");
 
 exports.resizeCategoryImage = asyncHandler(async (req, res, next) => {
@@ -23,7 +27,11 @@ exports.resizeCategoryImage = asyncHandler(async (req, res, next) => {
   next();
 });
 
-//* GET Categories
+/**
+ * @desc   Get All Categories
+ * @route  GET /api/v1/categories
+ * @access Public
+ */
 exports.getCategories = asyncHandler(async (req, res) => {
   const documentCounts = await Category.countDocuments();
   const apiFeatures = new ApiFeatures(Category.find(), req.query)
@@ -44,7 +52,11 @@ exports.getCategories = asyncHandler(async (req, res) => {
   });
 });
 
-//* GET Specific Category by id
+/**
+ * @desc   Get Signle Cateogry by ID
+ * @route  GET /api/v1/cateogries/:id
+ * @access Public
+ */
 exports.getCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const category = await Category.findById(id);
@@ -56,7 +68,11 @@ exports.getCategory = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: category });
 });
 
-//* POST Create New Category
+/**
+ * @desc   Create New Category
+ * @route  POST /api/v1/categories
+ * @access Private
+ */
 exports.createCategory = asyncHandler(async (req, res) => {
   const { title, image } = req.body;
 
@@ -68,7 +84,11 @@ exports.createCategory = asyncHandler(async (req, res) => {
   res.status(201).json({ status: "success", data: category });
 });
 
-//* PUT Update Specific Category by id
+/**
+ * @desc   Update Specific Category
+ * @route  PUT /api/v1/categories/:id
+ * @access Private
+ */
 exports.updateCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { title } = req.body;
@@ -86,7 +106,11 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: updatedCategory });
 });
 
-//* DELETE Specific Category by id
+/**
+ * @desc   Delete Specific Category
+ * @route  DELETE /api/v1/categories/:id
+ * @access Private
+ */
 exports.DeleteCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 

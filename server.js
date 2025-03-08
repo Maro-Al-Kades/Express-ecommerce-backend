@@ -17,6 +17,7 @@ const brandRoute = require("./routes/brands.routes");
 const productRoute = require("./routes/products.routes");
 const adRoute = require("./routes/ads.routes");
 const userRoute = require("./routes/users.routes");
+const authRoute = require("./routes/auth.routes");
 
 // errors
 const ApiError = require("./errors/apiError");
@@ -47,6 +48,7 @@ app.use("/api/v1/brands", brandRoute);
 app.use("/api/v1/products", productRoute);
 app.use("/api/v1/ads", adRoute);
 app.use("/api/v1/users", userRoute);
+app.use("/api/v1/auth", authRoute);
 
 app.all("*", (req, res, next) => {
   next(

@@ -8,8 +8,11 @@ const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 
+/**
+ * @desc   Upload & Resize User Image
+ * @access Public
+ */
 exports.uploadUserImage = uploadSingleImage("profileImg");
-
 exports.resizeUserImage = asyncHandler(async (req, res, next) => {
   const filename = `users-${uuidv4()}-${Date.now()}.jpeg`;
 
@@ -26,7 +29,11 @@ exports.resizeUserImage = asyncHandler(async (req, res, next) => {
   next();
 });
 
-//* GET Users
+/**
+ * @desc   Get All Users
+ * @route  GET /api/v1/users
+ * @access Public
+ */
 exports.getUsers = asyncHandler(async (req, res, next) => {
   const documentCounts = await User.countDocuments();
 
@@ -55,7 +62,11 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
   });
 });
 
-//* GET Specific Brand by id
+/**
+ * @desc   Get Signle User by ID
+ * @route  GET /api/v1/users/:id
+ * @access Public
+ */
 exports.getUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const user = await User.findById(id).select("+password").lean();
@@ -67,7 +78,11 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: user });
 });
 
-//* POST Create New user
+/**
+ * @desc   Create New User
+ * @route  POST /api/v1/users
+ * @access Private
+ */
 exports.createUser = asyncHandler(async (req, res) => {
   console.log("Received Body:", req.body);
   const { name, email, profileImg, password, phone } = req.body;
@@ -86,7 +101,11 @@ exports.createUser = asyncHandler(async (req, res) => {
   res.status(201).json({ status: "success", data: newUser });
 });
 
-//* PUT Update Specific User by id
+/**
+ * @desc   Update Specific User
+ * @route  PUT /api/v1/users/:id
+ * @access Private
+ */
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
@@ -111,7 +130,11 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: updatedUser });
 });
 
-//* PUT Update User Password
+/**
+ * @desc   Change User Password
+ * @route  DELETE /api/v1/users/:id/change-password
+ * @access Public
+ */
 exports.changeUserPassword = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
@@ -130,7 +153,11 @@ exports.changeUserPassword = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: updatedUser });
 });
 
-//* DELETE Specific User by id
+/**
+ * @desc   Delete Specific User
+ * @route  DELETE /api/v1/users/:id
+ * @access Private
+ */
 exports.DeleteUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 

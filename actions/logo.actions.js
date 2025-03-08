@@ -7,8 +7,11 @@ const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 const Logo = require("../models/Logo.model");
 
+/**
+ * @desc   Upload & Resize Logo Image
+ * @access Private
+ */
 exports.uploadLogoImage = uploadSingleImage("image");
-
 exports.resizeLogoImage = asyncHandler(async (req, res, next) => {
   const filename = `logos-${uuidv4()}-${Date.now()}.jpeg`;
 
@@ -25,7 +28,11 @@ exports.resizeLogoImage = asyncHandler(async (req, res, next) => {
   next();
 });
 
-//* GET Logo
+/**
+ * @desc   Get Logo
+ * @route  GET /api/v1/logo
+ * @access Public
+ */
 exports.getLogo = asyncHandler(async (req, res) => {
   const documentCounts = await Logo.countDocuments();
   const apiFeatures = new ApiFeatures(Logo.find(), req.query)
@@ -46,7 +53,11 @@ exports.getLogo = asyncHandler(async (req, res) => {
   });
 });
 
-//* POST Create New Logo
+/**
+ * @desc   Create New Logo
+ * @route  POST /api/v1/logo
+ * @access Private
+ */
 exports.createLogo = asyncHandler(async (req, res) => {
   const { title, image } = req.body;
 
@@ -54,7 +65,11 @@ exports.createLogo = asyncHandler(async (req, res) => {
   res.status(201).json({ status: "success", data: logo });
 });
 
-//* PUT Update Specific Logo by id
+/**
+ * @desc   Update Specific Logo
+ * @route  PUT /api/v1/logo/:id
+ * @access Private
+ */
 exports.updateLogo = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { title } = req.body;
@@ -72,7 +87,11 @@ exports.updateLogo = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: updatedLogo });
 });
 
-//* DELETE Specific Logo by id
+/**
+ * @desc   Delete Specific Logo
+ * @route  DELETE /api/v1/logo/:id
+ * @access Private
+ */
 exports.DeleteLogo = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 

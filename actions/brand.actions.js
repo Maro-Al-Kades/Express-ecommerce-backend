@@ -7,6 +7,10 @@ const { uploadSingleImage } = require("../middlewares/uploadImage.middleware");
 const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 
+/**
+ * @desc   Upload & Resize Brand Image
+ * @access Private
+ */
 exports.uploadBrandImage = uploadSingleImage("image");
 
 exports.resizeBrandImage = asyncHandler(async (req, res, next) => {
@@ -23,7 +27,11 @@ exports.resizeBrandImage = asyncHandler(async (req, res, next) => {
   next();
 });
 
-//* GET Brands
+/**
+ * @desc   Get All Brands
+ * @route  GET /api/v1/brands
+ * @access Public
+ */
 exports.getBrands = asyncHandler(async (req, res) => {
   const documentCounts = await Brand.countDocuments();
   const apiFeatures = new ApiFeatures(
@@ -47,7 +55,11 @@ exports.getBrands = asyncHandler(async (req, res) => {
   });
 });
 
-//* GET Specific Brand by id
+/**
+ * @desc   Get Signle Brand by ID
+ * @route  GET /api/v1/brands/:id
+ * @access Public
+ */
 exports.getBrand = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const brand = await Brand.findById(id);
@@ -59,7 +71,11 @@ exports.getBrand = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: brand });
 });
 
-//* POST Create New Brand
+/**
+ * @desc   Create New Brand
+ * @route  POST /api/v1/brands
+ * @access Private
+ */
 exports.createBrand = asyncHandler(async (req, res) => {
   const { title, image } = req.body;
 
@@ -67,7 +83,11 @@ exports.createBrand = asyncHandler(async (req, res) => {
   res.status(201).json({ status: "success", data: brand });
 });
 
-//* PUT Update Specific Brand by id
+/**
+ * @desc   Update Specific Brand
+ * @route  PUT /api/v1/brands/:id
+ * @access Private
+ */
 exports.updateBrand = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { title } = req.body;
@@ -85,7 +105,11 @@ exports.updateBrand = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: updatedBrand });
 });
 
-//* DELETE Specific Brand by id
+/**
+ * @desc   Delete Specific Brand
+ * @route  DELETE /api/v1/brands/:id
+ * @access Private
+ */
 exports.DeleteBrand = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 

@@ -9,7 +9,11 @@ exports.setCategoryIdToBody = (req, res, next) => {
   next();
 };
 
-//* POST Create New SubCategory - ${DOMAIN}/api/v1/subCategories
+/**
+ * @desc   Create New subCategory
+ * @route  POST /api/v1/subcategories
+ * @access Private
+ */
 exports.createSubCategory = asyncHandler(async (req, res) => {
   const { title, category } = req.body;
 
@@ -22,6 +26,10 @@ exports.createSubCategory = asyncHandler(async (req, res) => {
   res.status(201).json({ status: "success", data: subCategory });
 });
 
+/**
+ * @desc   Create Filter Object
+ * @access Private
+ */
 exports.createFilterObject = (req, res, next) => {
   let filterObject = {};
   if (req.params.categoryId) filterObject = { category: req.params.categoryId };
@@ -30,7 +38,11 @@ exports.createFilterObject = (req, res, next) => {
   next();
 };
 
-//* GET SubCategories - ${DOMAIN}/api/v1/subCategories
+/**
+ * @desc   Get All Subcateogries
+ * @route  GET /api/v1/subcategories
+ * @access Public
+ */
 exports.getSubCategories = asyncHandler(async (req, res) => {
   const documentCounts = await SubCategory.countDocuments();
   const apiFeatures = new ApiFeatures(
@@ -55,7 +67,11 @@ exports.getSubCategories = asyncHandler(async (req, res) => {
   });
 });
 
-//* GET Specific SubCategory by id - ${DOMAIN}/api/v1/subCategories/:id
+/**
+ * @desc   Get Signle subCategory by ID
+ * @route  GET /api/v1/subcategories/:id
+ * @access Public
+ */
 exports.getSubCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const subCategory = await SubCategory.findById(id).populate({
@@ -70,7 +86,11 @@ exports.getSubCategory = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: subCategory });
 });
 
-//* PUT Update Specific SubCategory by id - ${DOMAIN}/api/v1/subCategories/:id
+/**
+ * @desc   Update Specific subCategory
+ * @route  PUT /api/v1/subcategories/:id
+ * @access Private
+ */
 exports.updateSubCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { title, category } = req.body;
@@ -88,7 +108,11 @@ exports.updateSubCategory = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: subCategory });
 });
 
-//* DELETE Specific SubCategory by id - ${DOMAIN}/api/v1/subCategories/:id
+/**
+ * @desc   Delete Specific subCategory
+ * @route  DELETE /api/v1/subcategories/:id
+ * @access Private
+ */
 exports.DeleteSubCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
@@ -103,7 +127,11 @@ exports.DeleteSubCategory = asyncHandler(async (req, res, next) => {
     .json({ status: "success", msg: "subCategory Deleted Successfully..." });
 });
 
-//* DELETE All SubCategories - ${DOMAIN}/api/v1/subCategories
+/**
+ * @desc   Delete All Subcateogries
+ * @route  DELETE /api/v1/subcategories
+ * @access Private
+ */
 exports.DeleteSubCategories = asyncHandler(async (req, res, next) => {
   const subCategories = await SubCategory.find({});
 
