@@ -8,6 +8,7 @@ const {
   DeleteCategory,
   uploadCategoryImage,
   resizeCategoryImage,
+  getCateogriesCount,
 } = require("../actions/category.actions");
 const {
   getCategoryValidator,
@@ -29,6 +30,9 @@ router
     createCategoryValidator,
     createCategory
   );
+
+router.route("/count").get(getCateogriesCount);
+
 router
   .route("/:id")
   .get(getCategoryValidator, getCategory)

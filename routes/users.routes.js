@@ -8,6 +8,7 @@ const {
   DeleteUser,
   uploadUserImage,
   resizeUserImage,
+  getUsersCount,
 } = require("../actions/user.actions");
 
 const {
@@ -30,6 +31,9 @@ router
   .route("/")
   .get(getUsers)
   .post(uploadUserImage, resizeUserImage, createUserValidator, createUser);
+
+router.get("/count", getUsersCount);
+
 router
   .route("/:id")
   .get(getUserValidator, getUser)

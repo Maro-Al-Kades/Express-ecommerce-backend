@@ -14,17 +14,31 @@ const { v4: uuidv4 } = require("uuid");
 exports.uploadBrandImage = uploadSingleImage("image");
 
 exports.resizeBrandImage = asyncHandler(async (req, res, next) => {
-  const filename = `brands-${uuidv4()}-${Date.now()}.jpeg`;
+  const filename = `brands-${uuidv4()}-${Date.now()}.png`;
 
   await sharp(req.file.buffer)
-    .resize(600, 600)
-    .toFormat("jpeg")
-    .jpeg({ quality: 95 })
+    .resize(1000, 1000)
+    .toFormat("png")
+    .png({ quality: 95 })
     .toFile(`uploads/brands/${filename}`);
 
   req.body.image = filename;
 
   next();
+});
+
+/**
+ * @desc   Get Brands Count
+ * @route  GET /api/v1/brands
+ * @access Public
+ */
+exports.getBrandsCount = asyncHandler(async (req, res) => {
+  const count = await Brand.countDocuments();
+
+  res.status(200).json({
+    status: "success",
+    count,
+  });
 });
 
 /**
@@ -122,4 +136,23 @@ exports.DeleteBrand = asyncHandler(async (req, res, next) => {
   res
     .status(200)
     .json({ status: "success", msg: "Brand Deleted Successfully..." });
+});
+
+/**
+ * @desc   Delete All Brands
+ * @route  DELETE /api/v1/brands
+ * @access Private
+ */
+exports.DeleteBrands = asyncHandler(async (req, res, next) => {
+  const subCategories = await Brand.find({});
+
+  if (!subCategories) {
+    return next(new ApiError("No Brands found to delete", 404));
+  }
+
+  await Brand.deleteMany();
+
+  res
+    .status(200)
+    .json({ status: "success", msg: "Brands Deleted Successfully..." });
 });

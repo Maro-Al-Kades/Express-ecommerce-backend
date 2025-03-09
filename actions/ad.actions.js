@@ -13,19 +13,33 @@ const AD = require("../models/Ad.model");
  */
 exports.uploadAdImage = uploadSingleImage("image");
 exports.resizeAdImage = asyncHandler(async (req, res, next) => {
-  const filename = `ads-${uuidv4()}-${Date.now()}.jpeg`;
+  const filename = `ads-${uuidv4()}-${Date.now()}.png`;
 
   if (req.file) {
     await sharp(req.file.buffer)
       .resize(1000, 1000)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
+      .toFormat("png")
+      .png({ quality: 95 })
       .toFile(`uploads/ads/${filename}`);
 
     req.body.image = filename;
   }
 
   next();
+});
+
+/**
+ * @desc   Get Ads Count
+ * @route  GET /api/v1/Ads
+ * @access Public
+ */
+exports.getAdsCount = asyncHandler(async (req, res) => {
+  const count = await AD.countDocuments();
+
+  res.status(200).json({
+    status: "success",
+    count,
+  });
 });
 
 /**

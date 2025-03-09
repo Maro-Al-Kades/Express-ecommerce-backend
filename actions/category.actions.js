@@ -14,17 +14,31 @@ const { uploadSingleImage } = require("../middlewares/uploadImage.middleware");
 exports.uploadCategoryImage = uploadSingleImage("image");
 
 exports.resizeCategoryImage = asyncHandler(async (req, res, next) => {
-  const filename = `category-${uuidv4()}-${Date.now()}.jpeg`;
+  const filename = `category-${uuidv4()}-${Date.now()}.png`;
 
   await sharp(req.file.buffer)
     .resize(600, 600)
-    .toFormat("jpeg")
-    .jpeg({ quality: 90 })
+    .toFormat("png")
+    .png({ quality: 90 })
     .toFile(`uploads/categories/${filename}`);
 
   req.body.image = filename;
 
   next();
+});
+
+/**
+ * @desc   Get Cateogries Count
+ * @route  GET /api/v1/Cateogries
+ * @access Public
+ */
+exports.getCateogriesCount = asyncHandler(async (req, res) => {
+  const count = await Category.countDocuments();
+
+  res.status(200).json({
+    status: "success",
+    count,
+  });
 });
 
 /**

@@ -13,13 +13,13 @@ const Logo = require("../models/Logo.model");
  */
 exports.uploadLogoImage = uploadSingleImage("image");
 exports.resizeLogoImage = asyncHandler(async (req, res, next) => {
-  const filename = `logos-${uuidv4()}-${Date.now()}.jpeg`;
+  const filename = `logos-${uuidv4()}-${Date.now()}.png`;
 
   if (req.file) {
     await sharp(req.file.buffer)
       .resize(1000, 1000)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
+      .toFormat("png")
+      .png({ quality: 95 })
       .toFile(`uploads/logos/${filename}`);
 
     req.body.image = filename;

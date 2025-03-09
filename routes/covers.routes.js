@@ -8,6 +8,7 @@ const {
   DeleteCovers,
   uploadCoverImage,
   resizeCoverImage,
+  getCoversCount,
 } = require("../actions/cover.actions");
 const {
   createCoverValidator,
@@ -23,6 +24,8 @@ router
   .get(getCovers)
   .post(uploadCoverImage, resizeCoverImage, createCoverValidator, createCover)
   .delete(DeleteCovers);
+
+router.route("/count").get(getCoversCount);
 router
   .route("/:id")
   .get(getCoverValidator, getCover)

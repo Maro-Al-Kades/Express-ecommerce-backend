@@ -25,12 +25,12 @@ exports.uploadProductImages = uploadMultipleImages([
 ]);
 exports.resizeProductImages = asyncHandler(async (req, res, next) => {
   if (req.files.imageCover) {
-    const imageCoverFileName = `products-${uuidv4()}-${Date.now()}-cover.jpeg`;
+    const imageCoverFileName = `products-${uuidv4()}-${Date.now()}-cover.png`;
 
     await sharp(req.files.imageCover[0].buffer)
       .resize(2000, 2000)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
+      .toFormat("png")
+      .png({ quality: 95 })
       .toFile(`uploads/products/${imageCoverFileName}`);
 
     req.body.imageCover = imageCoverFileName;
@@ -40,12 +40,12 @@ exports.resizeProductImages = asyncHandler(async (req, res, next) => {
     req.body.images = [];
     await Promise.all(
       req.files.images.map(async (img, index) => {
-        const imageName = `products-${uuidv4()}-${Date.now()}-${index}.jpeg`;
+        const imageName = `products-${uuidv4()}-${Date.now()}-${index}.png`;
 
         await sharp(img.buffer)
           .resize(2000, 1333)
-          .toFormat("jpeg")
-          .jpeg({ quality: 95 })
+          .toFormat("png")
+          .png({ quality: 95 })
           .toFile(`uploads/products/${imageName}`);
 
         req.body.images.push(imageName);
@@ -53,6 +53,20 @@ exports.resizeProductImages = asyncHandler(async (req, res, next) => {
     );
   }
   next();
+});
+
+/**
+ * @desc   Get Products Count
+ * @route  GET /api/v1/Products
+ * @access Public
+ */
+exports.getProductsCount = asyncHandler(async (req, res) => {
+  const count = await Product.countDocuments();
+
+  res.status(200).json({
+    status: "success",
+    count,
+  });
 });
 
 /**

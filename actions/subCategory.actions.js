@@ -10,6 +10,20 @@ exports.setCategoryIdToBody = (req, res, next) => {
 };
 
 /**
+ * @desc   Get Subcategories Count
+ * @route  GET /api/v1/Subcategories
+ * @access Public
+ */
+exports.getSubcategoriesCount = asyncHandler(async (req, res) => {
+  const count = await SubCategory.countDocuments();
+
+  res.status(200).json({
+    status: "success",
+    count,
+  });
+});
+
+/**
  * @desc   Create New subCategory
  * @route  POST /api/v1/subcategories
  * @access Private

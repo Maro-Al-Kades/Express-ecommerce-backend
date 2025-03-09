@@ -13,19 +13,33 @@ const Cover = require("../models/cover.model");
  */
 exports.uploadCoverImage = uploadSingleImage("image");
 exports.resizeCoverImage = asyncHandler(async (req, res, next) => {
-  const filename = `covers-${uuidv4()}-${Date.now()}.jpeg`;
+  const filename = `covers-${uuidv4()}-${Date.now()}.png`;
 
   if (req.file) {
     await sharp(req.file.buffer)
       .resize(1600, 312)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
+      .toFormat("png")
+      .png({ quality: 95 })
       .toFile(`uploads/covers/${filename}`);
 
     req.body.image = filename;
   }
 
   next();
+});
+
+/**
+ * @desc   Get Covers Count
+ * @route  GET /api/v1/Covers
+ * @access Public
+ */
+exports.getCoversCount = asyncHandler(async (req, res) => {
+  const count = await Cover.countDocuments();
+
+  res.status(200).json({
+    status: "success",
+    count,
+  });
 });
 
 /**

@@ -1,21 +1,22 @@
 const express = require("express");
 
 const {
-  getAds,
-  DeleteAds,
-  uploadAdImage,
-  resizeAdImage,
-  createAd,
-  getAd,
-  updateAd,
-  DeleteAd,
-} = require("../actions/Ad.actions");
-const {
   createAdValidator,
   getAdValidator,
   updateAdValidator,
   deleteAdValidator,
 } = require("../validations/ad.validator");
+const {
+  getAds,
+  createAd,
+  uploadAdImage,
+  resizeAdImage,
+  DeleteAds,
+  getAdsCount,
+  getAd,
+  updateAd,
+  DeleteAd,
+} = require("../actions/ad.actions");
 
 const router = express.Router();
 
@@ -24,6 +25,8 @@ router
   .get(getAds)
   .post(uploadAdImage, resizeAdImage, createAdValidator, createAd)
   .delete(DeleteAds);
+
+router.get("/count", getAdsCount);
 router
   .route("/:id")
   .get(getAdValidator, getAd)

@@ -30,6 +30,20 @@ exports.resizeUserImage = asyncHandler(async (req, res, next) => {
 });
 
 /**
+ * @desc   Get Users Count
+ * @route  GET /api/v1/Users
+ * @access Public
+ */
+exports.getUsersCount = asyncHandler(async (req, res) => {
+  const count = await User.countDocuments();
+
+  res.status(200).json({
+    status: "success",
+    count,
+  });
+});
+
+/**
  * @desc   Get All Users
  * @route  GET /api/v1/users
  * @access Public

@@ -1,6 +1,9 @@
 const express = require("express");
 
-const { getProducts } = require("../actions/product.actions.js");
+const {
+  getProducts,
+  getProductsCount,
+} = require("../actions/product.actions.js");
 const { createProduct } = require("../actions/product.actions.js");
 const { getProduct } = require("../actions/product.actions.js");
 const { updateProduct } = require("../actions/product.actions.js");
@@ -26,6 +29,8 @@ router
     createProductValidator,
     createProduct
   );
+
+router.get("/count", getProductsCount);
 router
   .route("/:id")
   .get(getProductValidator, getProduct)

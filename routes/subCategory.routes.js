@@ -8,6 +8,7 @@ const {
   DeleteSubCategories,
   setCategoryIdToBody,
   createFilterObject,
+  getSubcategoriesCount,
 } = require("../actions/subCategory.actions");
 const {
   createSubCategoryValidator,
@@ -25,6 +26,8 @@ router
   .post(setCategoryIdToBody, createSubCategoryValidator, createSubCategory)
   .get(createFilterObject, getSubCategories)
   .delete(DeleteSubCategories);
+
+router.get("/count", getSubcategoriesCount);
 
 router
   .route("/:id")
