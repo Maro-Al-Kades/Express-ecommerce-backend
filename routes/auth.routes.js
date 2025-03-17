@@ -1,5 +1,5 @@
 const express = require("express");
-const { Register, Login } = require("../actions/auth.actions");
+const { Register, Login, forgetPassword } = require("../actions/auth.actions");
 
 const {
   RegisterValidator,
@@ -8,13 +8,8 @@ const {
 
 const router = express.Router();
 
-router.route("/register").post(RegisterValidator, Register);
-router.route("/login").post(LoginValidator, Login);
-
-// router
-//   .route("/:id")
-//   .get(getUserValidator, getUser)
-//   .put(uploadUserImage, resizeUserImage, updateUserValidator, updateUser)
-//   .delete(deleteUserValidator, DeleteUser);
+router.post("/register", RegisterValidator, Register);
+router.post("/login", LoginValidator, Login);
+router.post("/forgetPassword", forgetPassword);
 
 module.exports = router;

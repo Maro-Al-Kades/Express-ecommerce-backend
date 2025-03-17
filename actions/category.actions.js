@@ -16,13 +16,15 @@ exports.uploadCategoryImage = uploadSingleImage("image");
 exports.resizeCategoryImage = asyncHandler(async (req, res, next) => {
   const filename = `category-${uuidv4()}-${Date.now()}.png`;
 
-  await sharp(req.file.buffer)
-    .resize(600, 600)
-    .toFormat("png")
-    .png({ quality: 90 })
-    .toFile(`uploads/categories/${filename}`);
+  if (req.file) {
+    await sharp(req.file.buffer)
+      .resize(600, 600)
+      .toFormat("png")
+      .png({ quality: 90 })
+      .toFile(`uploads/categories/${filename}`);
 
-  req.body.image = filename;
+    req.body.image = filename;
+  }
 
   next();
 });

@@ -17,20 +17,44 @@ const {
   updateAd,
   DeleteAd,
 } = require("../actions/ad.actions");
+const AuthService = require("../actions/auth.actions");
 
 const router = express.Router();
 
 router
   .route("/")
   .get(getAds)
-  .post(uploadAdImage, resizeAdImage, createAdValidator, createAd)
-  .delete(DeleteAds);
+  .post(
+    AuthService.PROTECT_MIDDLEWARE,
+    AuthService.allowedTo("manager", "admin"),
+    uploadAdImage,
+    resizeAdImage,
+    createAdValidator,
+    createAd
+  )
+  .delete(
+    AuthService.PROTECT_MIDDLEWARE,
+    AuthService.allowedTo("admin"),
+    DeleteAds
+  );
 
 router.get("/count", getAdsCount);
 router
   .route("/:id")
   .get(getAdValidator, getAd)
-  .put(uploadAdImage, resizeAdImage, updateAdValidator, updateAd)
-  .delete(deleteAdValidator, DeleteAd);
+  .put(
+    AuthService.PROTECT_MIDDLEWARE,
+    AuthService.allowedTo("manager", "admin"),
+    uploadAdImage,
+    resizeAdImage,
+    updateAdValidator,
+    updateAd
+  )
+  .delete(
+    AuthService.PROTECT_MIDDLEWARE,
+    AuthService.allowedTo("admin"),
+    deleteAdValidator,
+    DeleteAd
+  );
 
 module.exports = router;

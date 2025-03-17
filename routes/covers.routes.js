@@ -16,20 +16,44 @@ const {
   updateCoverValidator,
   deleteCoverValidator,
 } = require("../validations/cover.validator");
+const AuthService = require("../actions/auth.actions");
 
 const router = express.Router();
 
 router
   .route("/")
   .get(getCovers)
-  .post(uploadCoverImage, resizeCoverImage, createCoverValidator, createCover)
-  .delete(DeleteCovers);
+  .post(
+    AuthService.PROTECT_MIDDLEWARE,
+    AuthService.allowedTo("manager", "admin"),
+    uploadCoverImage,
+    resizeCoverImage,
+    createCoverValidator,
+    createCover
+  )
+  .delete(
+    AuthService.PROTECT_MIDDLEWARE,
+    AuthService.allowedTo("admin"),
+    DeleteCovers
+  );
 
 router.route("/count").get(getCoversCount);
 router
   .route("/:id")
   .get(getCoverValidator, getCover)
-  .put(uploadCoverImage, resizeCoverImage, updateCoverValidator, updateCover)
-  .delete(deleteCoverValidator, DeleteCover);
+  .put(
+    AuthService.PROTECT_MIDDLEWARE,
+    AuthService.allowedTo("manager", "admin"),
+    uploadCoverImage,
+    resizeCoverImage,
+    updateCoverValidator,
+    updateCover
+  )
+  .delete(
+    AuthService.PROTECT_MIDDLEWARE,
+    AuthService.allowedTo("admin"),
+    deleteCoverValidator,
+    DeleteCover
+  );
 
 module.exports = router;

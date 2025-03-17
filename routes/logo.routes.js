@@ -13,16 +13,36 @@ const {
   updateLogoValidator,
   deleteLogoValidator,
 } = require("../validations/logo.validator");
+const AuthService = require("../actions/auth.actions");
 
 const router = express.Router();
 
 router
   .route("/")
   .get(getLogo)
-  .post(uploadLogoImage, resizeLogoImage, createLogoValidator, createLogo);
+  .post(
+    AuthService.PROTECT_MIDDLEWARE,
+    AuthService.allowedTo("admin"),
+    uploadLogoImage,
+    resizeLogoImage,
+    createLogoValidator,
+    createLogo
+  );
 router
   .route("/:id")
-  .put(uploadLogoImage, resizeLogoImage, updateLogoValidator, updateLogo)
-  .delete(deleteLogoValidator, DeleteLogo);
+  .put(
+    AuthService.PROTECT_MIDDLEWARE,
+    AuthService.allowedTo("admin"),
+    uploadLogoImage,
+    resizeLogoImage,
+    updateLogoValidator,
+    updateLogo
+  )
+  .delete(
+    AuthService.PROTECT_MIDDLEWARE,
+    AuthService.allowedTo("admin"),
+    deleteLogoValidator,
+    DeleteLogo
+  );
 
 module.exports = router;
